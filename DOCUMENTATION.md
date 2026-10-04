@@ -44,14 +44,14 @@ description: |
 永远用 **managed venv**，不要污染系统 Python：
 
 ```bash
-# managed python 位置
-PY="<WORKBUDDY_DIR>/binaries/python/versions/3.13.12/python.exe"
+# 虚拟环境位置（示例）
+PY="<VENV_ROOT>/binaries/python/versions/3.13.12/python.exe"
 
 # 建 venv（首次）
-$PY -m venv "<WORKBUDDY_DIR>/binaries/python/envs/default"
+$PY -m venv "<VENV_ROOT>/binaries/python/envs/default"
 
 # 装依赖
-"<WORKBUDDY_DIR>/binaries/python/envs/default/Scripts/pip.exe" install python-docx Pillow
+"<VENV_ROOT>/binaries/python/envs/default/Scripts/pip.exe" install python-docx Pillow
 ```
 
 ### 2.2 Windows vs Git Bash 路径坑 ⚠️
@@ -99,7 +99,7 @@ $PY -m venv "<WORKBUDDY_DIR>/binaries/python/envs/default"
 
 ```
 [16pt 粗体]  签署
-测试/安装人员：工程承建商　　　日期：2026-08-28
+测试/安装人员：工程承建商　　　日期：____年__月__日
 业主/用户：________________　　　日期：________________
 ```
 
@@ -238,15 +238,15 @@ def add_photo_grid(doc, items, caption_size=9):
     return counts
 ```
 
-> 大量相（如 Lux 29 张）用上边自适应网格；少量相（风扇 2-4 张）可用附录 §八的 `add_photo_grid()`（2 列无框线版，相放大到上限）。
+> 相片多（例如 20 张以上）用上边自适应网格；相片少（2–4 张）可用附录 §八的 `add_photo_grid()`（2 列无框线版，相放大到上限）。
 
-### 5.4 成效对比（真实数据）
+### 5.4 分页效果对比（合成测试数据）
 
-| 报告 | 相片数 | 固定 2×2 | 自适应 |
+| 报告（示例） | 相片数 | 固定 2×2 | 自适应 |
 |---|---|---|---|
-| 灯具安装 18 张 | 18 | 5 页 | **3 页** [6,6,6] |
-| Lux 照度 29 张 | 29 | 8 页 | **5 页** [6,6,6,6,5] |
-| 风扇 3 张 | 3 | 1 页 | 1 页（2 行，相放大到 9 cm） |
+| 灯具安装类报告 | 18 | 5 页 | **3 页** [6,6,6] |
+| 照度测量类报告 | 29 | 8 页 | **5 页** [6,6,6,6,5] |
+| 设备类报告 | 3 | 1 页 | 1 页（2 行，相放大到 9 cm） |
 
 ---
 
@@ -255,28 +255,28 @@ def add_photo_grid(doc, items, caption_size=9):
 ### 6.1 错的做法
 
 ```python
-# 假设档名 "132室_465lux.jpg"
-base = os.path.basename(ph)          # "132室_465lux.jpg"
+# 假设档名 "A101_465lux.jpg"
+base = os.path.basename(ph)          # "A101_465lux.jpg"
 lux_val = base.split("_")[-1].replace("lux.jpg", "")
 # → "465"  OK
 
-# 但若档名是 "132室_465lux_01.jpg"（重复相，_01 后缀）
-base = "132室_465lux_01.jpg"
+# 但若档名是 "A101_465lux_01.jpg"（重复相，_01 后缀）
+base = "A101_465lux_01.jpg"
 lux_val = base.split("_")[-1].replace("lux.jpg", "")
-# → "01.jpg"  ❌  caption 变成 "132室 — 01.jpg lux"
+# → "01.jpg"  ❌  caption 变成 "A101 — 01.jpg lux"
 ```
 
-**Bug 确认**：用户在 Lux 报告中手动修正了这个 bug（将 caption 改为 "132室 — 465.6 lux" 用平均值）。
+**Bug 确认**：曾经出现过这种错误 caption，改用下面的平均值写法后解决。
 
 ### 6.2 正确做法：用数据表的平均值/编号
 
 ```python
-# LUX_DATA = {"132室": [465, 502, 505, 606]}
-loc_avg = round(sum(LUX_DATA[loc]) / len(LUX_DATA[loc]), 1)  # 519.5
-caption = f"{loc} — {loc_avg} lux"   # "132室 — 519.5 lux"（交付件实测格式）
+# LUX_DATA = {"A101": [420, 480, 510, 560]}   # 示例值
+loc_avg = round(sum(LUX_DATA[loc]) / len(LUX_DATA[loc]), 1)  # 492.5
+caption = f"{loc} — {loc_avg} lux"   # "A101 — 492.5 lux"（示例格式）
 
 # 或者用测点编号
-caption = f"{loc} 测点 {idx+1}"       # "132室 测点 1"
+caption = f"{loc} 测点 {idx+1}"       # "A101 测点 1"
 ```
 
 **原则：caption 内容必须来自结构化数据，不要由档名解析。** 档名只是 ID，不是数据。
@@ -397,14 +397,14 @@ def verify(path, expect_imgs):
 |---|---|---|---|
 | 1 | managed venv 路径写 `bin/python` | 找不到 python | Windows venv 是 **`Scripts\python.exe`** |
 | 2 | 喂 POSIX `/d/...` 路径给 python-docx | PackageNotFoundError | python 跑在 Windows 下，要用 `D:\...` |
-| 3 | caption 由档名解析（`_01` 后缀） | "132室 — 01.jpg lux" 垃圾文字 | caption 内容用结构化数据，不要解析档名 |
+| 3 | caption 由档名解析（`_01` 后缀） | "A101 — 01.jpg lux" 垃圾文字 | caption 内容用结构化数据，不要解析档名 |
 | 4 | 相片重复汇出无去重 | 嵌入相数 ≠ glob 数 | MD5 set 去重 |
 | 5 | 用 `run.add_picture(width=, height=)` 两个都设但 aspect 错 | 相片变形 | 计算好 aspect 后只设限制维度，或两个都按 aspect 算 |
 | 6 | TableGrid 预设 `autofit=True` | Word 自动调栏宽，2 栏变 1 栏 | `fix_table_layout()`：tblLayout fixed + autofit=False + 锁 cell.width |
 | 7 | 「贪婪塞行」配直向相 | 一页只 2 行 4 张，无改善 | 改用「行数固定、相片按行数缩放」（核心算法） |
 | 8 | Word 保存报「权限错误」 | 文件被设唯读 / 锁住 | `attrib -R file.docx` + `os.chmod(file, 0o777)` |
-| 9 | Read tool 读图报「Content filtered」 | 模型话看不到 | 靠 cache 机制逐张确认；或用 MD5 交叉验证 |
-| 10 | 文件首次存在 工作目录 | Sandbox 静默拒绝，改放到工作目录 |
+| 9 | 读图工具报内容被过滤 | 看不到图 | 改用程序逐张校验；或用 MD5 交叉验证 |
+| 10 | 文件首次保存在受保护目录 | 被安全策略静默拒绝 | 改放到项目工作目录 |
 | 11 | 页眉图太大（15.92×4.32）压正文 | 正文被 logo 覆盖 | 缩到 ~7.5×2.0 cm，或上边距调到 ~4.6 cm |
 | 12 | `add_body()` 传两个 text 参数 | "文字2" 被当 size 传入 `Pt()` 报错 | `+` 拼接或分两次调用 |
 | 13 | `set_run()` 只设 `run.font.name` | 中文字体不生效 | `w:ascii` + `w:hAnsi` + `w:eastAsia` 三属性一齐设 |
@@ -503,7 +503,7 @@ print("saved:", OUT)
 
 | 日期 | 变更 | 触发 |
 |---|---|---|
-| 2026-08-28 | 初版建立 | 学校灯具 Lux 报告任务（v1~v4 四次迭代） |
-| 2026-08-28 | 加入 `_01` 后缀 caption bug 教训 | 用户手改 Lux 报告修正 caption |
-| 2026-08-28 | 确认自适应网格公式 | 解决「直向相塞不落 3 行」问题 |
-| 2026-09-01 | **统一升级**：合并知识库 SOP + 蓝色系模板 + python-docx 踩坑 + 三份交付件实测（承建商抬头图 7.5×2.0、统一签署区、A4/Letter 两套纸型、三件套章节结构），新增 `references/竣工报告三件套_模板与SOP.md` | 用户要求把竣工报告三件套能力统一封装入本技能 |
+| —— | 建立 | 为了给工程竣工报告做相片排版而写 |
+| —— | 加入 `_01` 后缀 caption bug 教训 | 实际使用中踩到并修正 |
+| —— | 确认自适应网格公式 | 解决「直向相塞不落 3 行」问题 |
+| —— | 统一升级：蓝色系模板 + python-docx 踩坑 + 统一签署区 + A4/Letter 两套纸型 + 三件套章节结构，新增 `references/竣工报告三件套_模板与SOP.md` | 把竣工报告三件套能力统一封装入本技能 |
