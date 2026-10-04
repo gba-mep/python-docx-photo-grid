@@ -1,4 +1,4 @@
-# python-docx-photo-grid · Word 自適應相片排版
+# python-docx-photo-grid · Word 自适应相片排版
 
 <div align="center">
 
@@ -12,86 +12,86 @@
 
 A4 geometry · MD5 dedup · Caption generation · Full helper library
 
-[快速開始](#快速開始) · [文件結構](#文件結構) · [技術棧](#技術棧)
+[快速开始](#快速开始) · [文件结构](#文件结构) · [技术栈](#技术栈)
 
 </div>
 
 ---
 
-> Python-based Word (.docx) 報告生成，配**自適應 2 欄相片網格**算法。解決「固定 2×2 佈局浪費空間」嘅經典問題，按每頁實際行數動態縮放相片。
+> Python-based Word (.docx) 报告生成，配**自适应 2 栏相片网格**算法。解决「固定 2×2 布局浪费空间」的经典问题，按每页实际行数动态缩放相片。
 
-## 解決什麼問題
+## 解决什么问题
 
-生成有大量相片嘅 Word 報告時：
-- 固定 2×2 排版，行數少時相片太細、浪費空間
-- 手動拖相對位，幾十張相搞幾個鐘
-- 不同報告（燈具/Lux/風扇）格式唔統一
-- caption 編號、頁碼、簽署區每次重複做
+生成有大量相片的 Word 报告时：
+- 固定 2×2 排版，行数少时相片太细、浪费空间
+- 手动拖相对位，几十张相搞几个钟
+- 不同报告（灯具/Lux/风扇）格式不统一
+- caption 编号、页码、签署区每次重复做
 
-**python-docx-photo-grid** 將呢啲全部自動化。
+**python-docx-photo-grid** 将这些全部自动化。
 
 ## 核心特性
 
-### 🖼️ 自適應相片網格算法
-- 最多 3 行 × 2 欄 = 6 張/頁
-- 按每頁實際相片數量動態縮放
-- A4 / Letter 頁面幾何常數精準計算
-- 長寬比自動適配，唔變形
+### 🖼️ 自适应相片网格算法
+- 最多 3 行 × 2 栏 = 6 张/页
+- 按每页实际相片数量动态缩放
+- A4 / Letter 页面几何常数精准计算
+- 长宽比自动适配，不变形
 
-### 📸 相片處理管線
-- MD5 相片去重（重複相自動跳過）
-- 圖片壓縮（控制文件大小）
-- caption 自動生成（避開 `_01` 後綴 bug）
+### 📸 相片处理管线
+- MD5 相片去重（重复相自动跳过）
+- 图片压缩（控制文件大小）
+- caption 自动生成（避开 `_01` 后缀 bug）
 
-### 📋 完整 Helper 庫
-- 字體設定（中英文混排）
-- 表格邊框樣式
-- 頁碼 + 頁眉抬頭圖
-- 統一簽署區塊
+### 📋 完整 Helper 库
+- 字体设定（中英文混排）
+- 表格边框样式
+- 页码 + 页眉抬头图
+- 统一签署区块
 
-### 🧪 驗證工具
-- 結構完整性檢查腳本
-- 17 個 documented pitfalls
+### 🧪 验证工具
+- 结构完整性检查脚本
+- 17 个 documented pitfalls
 
-### 🏗️ 工程竣工報告模板
-適用於工程各類圖文並茂測試竣工報告
-（統一藍色系 + 承建商抬頭圖 + 章節結構）
+### 🏗️ 工程竣工报告模板
+适用于工程各类图文并茂测试竣工报告
+（统一蓝色系 + 承建商抬头图 + 章节结构）
 
-> 🔒 **工程竣工報告模板與SOP** 為非公開內容，不在此公開 repo 中。
-> 包含完整模板、排版規格、SOP 流程、實機交付件參數。
-> 如需商業使用，請郵件聯絡：**david_1999cn@hotmail.com**
+> 🔒 **工程竣工报告模板与SOP** 为非公开内容，不在此公开 repo 中。
+> 包含完整模板、排版规格、SOP 流程、实机交付件参数。
+> 如需商业使用，请邮件联络：**david_1999cn@hotmail.com**
 
-## 適用場景
+## 适用场景
 
-| 場景 | 例子 |
+| 场景 | 例子 |
 |:---|:---|
-| 竣工/驗收/測試報告 | 燈具/Lux/風扇/電箱/設備驗收 |
-| 巡查/勘察記錄 | 現場勘察備忘錄、質量檢驗報告 |
-| 任何「文字+大量相片」報告 | 施工日誌、售後報告、工作總結 |
-| 需要相片排版靚 | 標書附件、客戶報告、年報 |
+| 竣工/验收/测试报告 | 灯具/Lux/风扇/电箱/设备验收 |
+| 巡查/勘察记录 | 现场勘察备忘录、质量检验报告 |
+| 任何「文字+大量相片」报告 | 施工日志、售后报告、工作总结 |
+| 需要相片排版好看 | 标书附件、客户报告、年报 |
 
-**唔適用**：純文字文檔；修改現有 docx（用 officecli-workflow）；表格數據為主。
+**不适用**：纯文字文档；修改现有 docx（用 officecli-workflow）；表格数据为主。
 
-## 文件結構
+## 文件结构
 
 ```
 python-docx-photo-grid/
 ├── README.md                          # 本文件
-├── DOCUMENTATION.md                   # 完整技能文檔
+├── DOCUMENTATION.md                   # 完整技能文档
 ├── assets/
-│   └── photo-grid-comparison.jpg      # 效果對比圖
+│   └── photo-grid-comparison.jpg      # 效果对比图
 ├── references/
-│   └── 竣工報告三件套_模板與SOP.md 🔒 # 模板 & SOP 參考（非公開，需郵件授權）
+│   └── 竣工报告三件套_模板与SOP.md 🔒 # 模板 & SOP 参考（非公开，需邮件授权）
 └── scripts/
-    └── adaptive_photo_grid.py         # 可重用程式碼模組
+    └── adaptive_photo_grid.py         # 可重用程式码模组
 ```
 
-## 技術棧
+## 技术栈
 
-- **Python** + **python-docx** — Word 文檔生成
-- **Pillow** — 圖片處理與尺寸計算
+- **Python** + **python-docx** — Word 文档生成
+- **Pillow** — 图片处理与尺寸计算
 
-## 快速開始
+## 快速开始
 
 ```python
 from adaptive_photo_grid import PhotoGridBuilder
@@ -101,7 +101,7 @@ builder.add_photos(["photo1.jpg", "photo2.jpg", "photo3.jpg"])
 builder.save("report.docx")
 ```
 
-詳細用法請參閱 [DOCUMENTATION.md](DOCUMENTATION.md)。
+详细用法请参阅 [DOCUMENTATION.md](DOCUMENTATION.md)。
 
 ---
 
@@ -115,9 +115,9 @@ MIT License — feel free to use, modify, and share.
 
 Part of the **[MEP & construction document automation toolkit](https://github.com/David-CB666)** — open-source tools built from real jobsite workflows.
 
-- **Handbook** — [ai-agent-manual](https://github.com/David-CB666/ai-agent-manual) (8-level AI cultivation for engineers)
-- **Document generation** — [material-approval-pipeline](https://github.com/David-CB666/material-approval-pipeline) · [material-submittal-generator](https://github.com/David-CB666/material-submittal-generator) · [excel-template-filler](https://github.com/David-CB666/excel-template-filler) · [daily-construction-log](https://github.com/David-CB666/daily-construction-log) · [officecli-workflow](https://github.com/David-CB666/officecli-workflow)
-- **Engineering calculation** — [lighting-lux-calculator](https://github.com/David-CB666/lighting-lux-calculator) · [ups-discharge-time-calculator](https://github.com/David-CB666/ups-discharge-time-calculator) · [gantt-chart-pro](https://github.com/David-CB666/gantt-chart-pro) · [electrical-test-report-generator](https://github.com/David-CB666/electrical-test-report-generator)
-- **CAD & drawings** — [electrical-panel-label-plates](https://github.com/David-CB666/electrical-panel-label-plates)
-- **Data & OCR** — [ocr-skill](https://github.com/David-CB666/ocr-skill) · [VBA-Macro-Reader-v2.0.0](https://github.com/David-CB666/VBA-Macro-Reader-v2.0.0)
-- **Compliance & AI ops** — [confined-space-planner](https://github.com/David-CB666/confined-space-planner) · [skill-router](https://github.com/David-CB666/skill-router) · [consulting-services](https://github.com/David-CB666/consulting-services)
+- **Handbook** — [ai-agent-manual](https://github.com/gba-mep/ai-agent-manual) (8-level AI cultivation for engineers)
+- **Document generation** — [material-approval-pipeline](https://github.com/gba-mep/material-approval-pipeline) · [material-submittal-generator](https://github.com/gba-mep/material-submittal-generator) · [excel-template-filler](https://github.com/gba-mep/excel-template-filler) · [daily-construction-log](https://github.com/gba-mep/daily-construction-log) · [officecli-workflow](https://github.com/gba-mep/officecli-workflow)
+- **Engineering calculation** — [lighting-lux-calculator](https://github.com/gba-mep/lighting-lux-calculator) · [ups-discharge-time-calculator](https://github.com/gba-mep/ups-discharge-time-calculator) · [gantt-chart-pro](https://github.com/gba-mep/gantt-chart-pro) · [electrical-test-report-generator](https://github.com/gba-mep/electrical-test-report-generator)
+- **CAD & drawings** — [electrical-panel-label-plates](https://github.com/gba-mep/electrical-panel-label-plates)
+- **Data & OCR** — [ocr-skill](https://github.com/gba-mep/ocr-skill) · [VBA-Macro-Reader-v2.0.0](https://github.com/gba-mep/VBA-Macro-Reader-v2.0.0)
+- **Compliance & AI ops** — [confined-space-planner](https://github.com/gba-mep/confined-space-planner) · [路由规则](https://github.com/gba-mep/路由规则) · [consulting-services](https://github.com/gba-mep/consulting-services)
